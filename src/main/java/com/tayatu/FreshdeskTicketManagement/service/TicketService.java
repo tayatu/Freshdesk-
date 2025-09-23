@@ -1,7 +1,11 @@
 package com.tayatu.FreshdeskTicketManagement.service;
 
+import com.tayatu.FreshdeskTicketManagement.dto.ConversationDTO;
+import com.tayatu.FreshdeskTicketManagement.dto.TicketDTO;
+import com.tayatu.FreshdeskTicketManagement.model.Conversation;
 import com.tayatu.FreshdeskTicketManagement.model.Ticket;
 import com.tayatu.FreshdeskTicketManagement.model.User;
+import com.tayatu.FreshdeskTicketManagement.repository.ConversationRepository;
 import com.tayatu.FreshdeskTicketManagement.repository.TicketRepository;
 import com.tayatu.FreshdeskTicketManagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +15,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TicketRepository ticketRepository;
+    @Autowired
+    private ConversationRepository conversationRepository;
 
-    public ResponseEntity<List<Ticket>> getAllTickets() {
+    public ResponseEntity<List<TicketDTO>> getAllTickets() {
         Optional<User> agent = userRepository.findByUsername("taya");
         if (agent.isEmpty()) {
             System.out.println("Agent not found " + "taya");
@@ -29,10 +35,13 @@ public class TicketService {
         }
 
         List<Ticket> tickets = ticketRepository.findByAssignedTo(agent.get());
-        return ResponseEntity.ok(tickets);
+        List<TicketDTO> ticketDTOs = tickets.stream()
+                .map(TicketDTO::fromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ticketDTOs);
     }
 
-    public ResponseEntity<Ticket> createTicket(Ticket ticket) {
+    public ResponseEntity<TicketDTO> createTicket(Ticket ticket) {
         Optional<User> agentOpt = userRepository.findByUsername("taya");
         Optional<User> raisedByOpt = userRepository.findByUsername("taya");
 
@@ -44,19 +53,23 @@ public class TicketService {
 
         ticket.setAssignedTo(agent);
         ticket.setRaisedBy(raisedBy);
-        ticket.setCreatedAt(String.valueOf(java.time.LocalDateTime.now()));
-        ticket.setUpdatedAt(String.valueOf(java.time.LocalDateTime.now()));
+        ticket.setCreatedAt(java.time.LocalDateTime.now());
+        ticket.setUpdatedAt(java.time.LocalDateTime.now());
         Ticket savedTicket = ticketRepository.save(ticket);
 
-        return ResponseEntity.ok(savedTicket);
+        return ResponseEntity.ok(TicketDTO.fromEntity(savedTicket));
     }
 
-    public ResponseEntity<Ticket> getTicketById(Long ticketId) {
-        Optional<Ticket> ticket = ticketRepository.findById(ticketId);
-        return ticket.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<TicketDTO> getTicketById(Long ticketId) {
+        Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
+        if (ticketOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        TicketDTO ticketDTO = TicketDTO.fromEntity(ticketOpt.get());
+        return ResponseEntity.ok(ticketDTO);
     }
 
-    public ResponseEntity<Ticket> updateTicket(Long ticketId, Ticket updatedTicket) {
+    public ResponseEntity<TicketDTO> updateTicket(Long ticketId, Ticket updatedTicket) {
         Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
         if (ticketOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -82,10 +95,28 @@ public class TicketService {
             ticket.setPriority(updatedTicket.getPriority());
         }
 
-        ticket.setUpdatedAt(String.valueOf(java.time.LocalDateTime.now()));
+        ticket.setUpdatedAt(java.time.LocalDateTime.now());
         ticketRepository.save(ticket);
-        return ResponseEntity.ok(ticket);
+
+        return ResponseEntity.ok(TicketDTO.fromEntity(ticket));
     }
 
+    public ResponseEntity<ConversationDTO> replyToTicket(Long ticketId, String message) {
+        Optional<Ticket> ticketOpt = ticketRepository.findById(ticketId);
+        Optional<User> userOpt = userRepository.findByUsername("taya");
 
+        if (ticketOpt.isEmpty() || userOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Conversation conversation = new Conversation();
+        conversation.setTicket(ticketOpt.get());
+        conversation.setSender(userOpt.get());
+        conversation.setMessage(message);
+        conversation.setSentAt(java.time.LocalDateTime.now());
+
+        Conversation savedConversation = conversationRepository.save(conversation);
+        ConversationDTO conversationDTO = ConversationDTO.fromEntity(savedConversation);
+        return ResponseEntity.ok(conversationDTO);
+    }
 }

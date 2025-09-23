@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -17,8 +20,8 @@ public class Ticket {
     private String ticketGroup;      // e.g., "Support", "IT"
     private String status;
     private String priority;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "raised_by_id")
@@ -27,4 +30,7 @@ public class Ticket {
     @ManyToOne
     @JoinColumn(name = "assigned_to_id")
     private User assignedTo;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<Conversation> conversations;
 }
