@@ -1,6 +1,7 @@
 package com.tayatu.FreshdeskTicketManagement.service;
 
 import com.tayatu.FreshdeskTicketManagement.dto.LoginRequest;
+import com.tayatu.FreshdeskTicketManagement.enums.Role;
 import com.tayatu.FreshdeskTicketManagement.model.User;
 import com.tayatu.FreshdeskTicketManagement.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,4 +31,14 @@ public class AdminService {
                 .body("User created successfully");
     }
 
+    public ResponseEntity<String> createAgent(User agent) {
+        if (userRepository.findByUsername(agent.getUsername()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
+                    .body("Agent already exists");
+        }
+        agent.setRole(Role.valueOf("AGENT"));
+        userRepository.save(agent);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("Agent created successfully");
+    }
 }

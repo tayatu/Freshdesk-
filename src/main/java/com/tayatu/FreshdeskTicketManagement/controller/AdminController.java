@@ -24,4 +24,9 @@ public class AdminController {
         return "Admin Dashboard";
     }
 
+    @PostMapping("/create-agent")
+    public ResponseEntity<String> createAgent(@RequestBody User agent) {
+        return adminService.createAgent(agent);
+    }
+
 }

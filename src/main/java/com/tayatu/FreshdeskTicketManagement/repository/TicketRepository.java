@@ -1,12 +1,14 @@
 package com.tayatu.FreshdeskTicketManagement.repository;
 
+import com.tayatu.FreshdeskTicketManagement.model.Ticket;
 import com.tayatu.FreshdeskTicketManagement.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+public interface TicketRepository extends JpaRepository<Ticket, Long> {
+    List<Ticket> findByAssignedTo(User assignedTo);
+
 }
