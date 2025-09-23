@@ -27,19 +27,5 @@ public class AgentController {
         return agentService.getAgentProfileById(id);
     }
 
-    @GetMapping("/tickets")
-    public ResponseEntity<List<Ticket>> viewTickets(@PathVariable Long id) {
-        return agentService.getAssignedTickets(id);
-    }
-
-    @GetMapping("/ticket/{ticketId}")
-    public ResponseEntity<Ticket> getTicket(@PathVariable Long ticketId) {
-        return agentService.getTicketById(ticketId);
-    }
-
-    @PutMapping("/ticket/{ticketId}")
-    public ResponseEntity<Ticket> updateTicket(@PathVariable Long ticketId, @RequestBody Ticket updatedTicket) {
-        return agentService.updateTicket(ticketId, updatedTicket);
-    }
-
+    // Crud Agent. update name number etc
 }

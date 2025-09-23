@@ -29,4 +29,6 @@ public class AdminController {
         return adminService.createAgent(agent);
     }
 
+    // Get All agents List
+    // CRUD Agents
 }
