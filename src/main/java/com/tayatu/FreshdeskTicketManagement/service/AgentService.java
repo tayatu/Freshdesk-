@@ -1,6 +1,6 @@
 package com.tayatu.FreshdeskTicketManagement.service;
+
 import com.tayatu.FreshdeskTicketManagement.dto.UserProfileDTO;
-import com.tayatu.FreshdeskTicketManagement.model.Ticket;
 import com.tayatu.FreshdeskTicketManagement.model.User;
 import com.tayatu.FreshdeskTicketManagement.repository.TicketRepository;
 import com.tayatu.FreshdeskTicketManagement.repository.UserRepository;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

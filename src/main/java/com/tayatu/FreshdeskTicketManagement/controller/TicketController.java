@@ -2,7 +2,6 @@ package com.tayatu.FreshdeskTicketManagement.controller;
 
 import com.tayatu.FreshdeskTicketManagement.dto.ConversationDTO;
 import com.tayatu.FreshdeskTicketManagement.dto.TicketDTO;
-import com.tayatu.FreshdeskTicketManagement.model.Conversation;
 import com.tayatu.FreshdeskTicketManagement.model.Ticket;
 import com.tayatu.FreshdeskTicketManagement.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;

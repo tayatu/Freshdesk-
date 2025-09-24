@@ -1,12 +1,13 @@
 package com.tayatu.FreshdeskTicketManagement.controller;
+
 import com.tayatu.FreshdeskTicketManagement.dto.UserProfileDTO;
-import com.tayatu.FreshdeskTicketManagement.model.Ticket;
 import com.tayatu.FreshdeskTicketManagement.service.AgentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/agent")

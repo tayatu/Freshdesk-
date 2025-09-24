@@ -1,11 +1,9 @@
 package com.tayatu.FreshdeskTicketManagement.model;
 
-import com.tayatu.FreshdeskTicketManagement.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
