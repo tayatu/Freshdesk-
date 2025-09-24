@@ -4,6 +4,7 @@ import com.tayatu.FreshdeskTicketManagement.dto.LoginRequest;
 import com.tayatu.FreshdeskTicketManagement.model.User;
 import com.tayatu.FreshdeskTicketManagement.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +15,13 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @PostMapping("/login")
-    public ResponseEntity<String> adminLogin(@RequestBody LoginRequest loginRequest) {
-        return adminService.addUser(loginRequest);
+    @PostMapping("/create-admin")
+    public ResponseEntity<String> createAdmin(@RequestBody LoginRequest loginRequest) {
+        try {
+            return adminService.createAdmin(loginRequest);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/dashboard")
@@ -26,7 +31,11 @@ public class AdminController {
 
     @PostMapping("/create-agent")
     public ResponseEntity<String> createAgent(@RequestBody User agent) {
-        return adminService.createAgent(agent);
+        try {
+            return adminService.createAgent(agent);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     // Get All agents List

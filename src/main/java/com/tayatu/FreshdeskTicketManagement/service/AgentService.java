@@ -33,7 +33,7 @@ public class AgentService {
         userProfileDTO.setUsername(user.getUsername());
         userProfileDTO.setEmail(user.getEmail());
         userProfileDTO.setFullName(user.getFullName());
-        userProfileDTO.setRole(user.getRole());
+        userProfileDTO.setRoles(user.getRoles());
         return ResponseEntity.ok(userProfileDTO);
     }
 

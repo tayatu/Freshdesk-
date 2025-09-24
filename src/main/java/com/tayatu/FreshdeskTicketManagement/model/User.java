@@ -1,11 +1,12 @@
 package com.tayatu.FreshdeskTicketManagement.model;
 
-import com.tayatu.FreshdeskTicketManagement.enums.Role;
+import com.tayatu.FreshdeskTicketManagement.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -17,9 +18,14 @@ public class User {
     private Long id;
     private String username;
     private String password;
-    @Enumerated(EnumType.STRING)
-    private Role role;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles;
 
     private String fullName;
     private String email;
