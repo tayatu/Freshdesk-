@@ -1,5 +1,8 @@
 package com.tayatu.FreshdeskTicketManagement.model;
 
+import com.tayatu.FreshdeskTicketManagement.enums.TicketPrioirity;
+import com.tayatu.FreshdeskTicketManagement.enums.TicketStatus;
+import com.tayatu.FreshdeskTicketManagement.enums.TicketType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,10 +19,10 @@ public class Ticket {
     private Long id;
     private String subject;
     private String description;
-    private String ticketType; // e.g., "Incident", "Service Request"
-    private String ticketGroup;      // e.g., "Support", "IT"
-    private String status;
-    private String priority;
+    private TicketType ticketType;
+    private String ticketGroup;
+    private TicketStatus status;
+    private TicketPrioirity priority;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

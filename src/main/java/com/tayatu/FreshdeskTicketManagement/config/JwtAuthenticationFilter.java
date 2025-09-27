@@ -1,14 +1,12 @@
 package com.tayatu.FreshdeskTicketManagement.config;
 
 import com.tayatu.FreshdeskTicketManagement.dto.AuthUserDTO;
+import com.tayatu.FreshdeskTicketManagement.service.AuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,14 +17,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.web.client.RestTemplate;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    @Value("${auth.service.url}")
-    private String AUTH_SERVICE_URL;
+    @Autowired
+    private AuthService authService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -38,13 +34,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             String jwtToken = requestTokenHeader.substring(7);
             System.out.println("Extracted JWT Token: " + jwtToken);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.TEXT_PLAIN);
-            HttpEntity<String> entity = new HttpEntity<>(jwtToken, headers);
 
             try {
-                ResponseEntity<AuthUserDTO> authResponse = restTemplate.postForEntity(
-                        AUTH_SERVICE_URL, entity, AuthUserDTO.class);
+                ResponseEntity<AuthUserDTO> authResponse = authService.verifyUser(jwtToken);
 
                 if (authResponse.getStatusCode().is2xxSuccessful() && authResponse.getBody() != null) {
                     AuthUserDTO authUser = authResponse.getBody();

@@ -2,6 +2,8 @@ package com.tayatu.FreshdeskTicketManagement.service;
 
 import com.tayatu.FreshdeskTicketManagement.dto.ConversationDTO;
 import com.tayatu.FreshdeskTicketManagement.dto.TicketDTO;
+import com.tayatu.FreshdeskTicketManagement.enums.TicketPrioirity;
+import com.tayatu.FreshdeskTicketManagement.enums.TicketStatus;
 import com.tayatu.FreshdeskTicketManagement.model.Conversation;
 import com.tayatu.FreshdeskTicketManagement.model.Ticket;
 import com.tayatu.FreshdeskTicketManagement.model.User;
@@ -60,6 +62,8 @@ public class TicketService {
 
         ticket.setAssignedAgent(agent);
         ticket.setRequestedId(raisedBy);
+        ticket.setStatus(ticket.getStatus() == null ? TicketStatus.OPEN : ticket.getStatus());
+        ticket.setPriority(ticket.getPriority() == null ? TicketPrioirity.LOW : ticket.getPriority());
         ticket.setCreatedAt(java.time.LocalDateTime.now());
         ticket.setUpdatedAt(java.time.LocalDateTime.now());
         ticket.setConversations(List.of());

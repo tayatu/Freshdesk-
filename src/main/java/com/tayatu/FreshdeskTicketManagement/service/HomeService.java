@@ -1,5 +1,6 @@
 package com.tayatu.FreshdeskTicketManagement.service;
 
+import com.tayatu.FreshdeskTicketManagement.dto.LoginRequest;
 import com.tayatu.FreshdeskTicketManagement.enums.RoleName;
 import com.tayatu.FreshdeskTicketManagement.model.Role;
 import com.tayatu.FreshdeskTicketManagement.repository.RoleRepository;
@@ -13,6 +14,10 @@ public class HomeService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+
+    @Autowired
+    private AuthService authService;
 
     public void addRoles() {
 
@@ -28,5 +33,12 @@ public class HomeService {
                 roleRepository.save(role);
             }
         });
+    }
+
+    public String loginUser(LoginRequest loginRequest) {
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+        System.out.println("Username: " + username + ", Password: " + password);
+        return authService.loginUser(loginRequest);
     }
 }

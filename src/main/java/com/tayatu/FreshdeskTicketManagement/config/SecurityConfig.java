@@ -30,7 +30,7 @@ public class SecurityConfig  {
         http
           .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/agent/dashboard").permitAll()
+                        .requestMatchers("/agent/dashboard", "/api/v1/auth/login").permitAll()
                         // All other requests must be authenticated
                         .anyRequest().authenticated()
                 )
