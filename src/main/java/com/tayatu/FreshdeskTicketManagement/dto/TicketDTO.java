@@ -23,8 +23,8 @@ public class TicketDTO {
     private String priority;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private SenderDTO raisedBy;
-    private SenderDTO assignedTo;
+    private Long requestedId;
+    private Long assignedAgentId;
     private List<ConversationDTO> conversations;
 
 
@@ -46,8 +46,8 @@ public class TicketDTO {
                 ticket.getPriority(),
                 ticket.getCreatedAt(),
                 ticket.getUpdatedAt(),
-                SenderDTO.fromEntity(ticket.getRaisedBy()),
-                SenderDTO.fromEntity(ticket.getAssignedTo()),
+                ticket.getRequestedId().getId(),
+                ticket.getAssignedAgent().getId(),
                 conversationDTOs
         );
     }

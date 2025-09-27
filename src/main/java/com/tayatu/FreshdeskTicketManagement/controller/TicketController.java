@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/tickets")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ROLE_CUSTOMER')")
 public class TicketController {
 
     @Autowired
@@ -26,7 +26,13 @@ public class TicketController {
 
     @PostMapping
     public ResponseEntity<TicketDTO> createTicket(@RequestBody Ticket newTicket) {
-        return ticketService.createTicket(newTicket);
+        try {
+            return ticketService.createTicket(newTicket);
+        }
+        catch (Exception e) {
+            System.out.println("Error creating ticket: " + e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @GetMapping("/{ticketId}")
@@ -34,10 +40,11 @@ public class TicketController {
         return ticketService.getTicketById(ticketId);
     }
 
-    @PutMapping("/{ticketId}")
-    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long ticketId, @RequestBody Ticket updatedTicket) {
-        return ticketService.updateTicket(ticketId, updatedTicket);
-    }
+//    no need for user to update ticket
+//    @PutMapping("/{ticketId}")
+//    public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long ticketId, @RequestBody Ticket updatedTicket) {
+//        return ticketService.updateTicket(ticketId, updatedTicket);
+//    }
 
     @PostMapping("/{ticketId}/reply")
     public ResponseEntity<ConversationDTO> replyToTicket(

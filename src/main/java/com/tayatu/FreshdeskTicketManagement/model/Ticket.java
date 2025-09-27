@@ -23,13 +23,14 @@ public class Ticket {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+
     @ManyToOne
     @JoinColumn(name = "raised_by_id")
-    private User raisedBy;
+    private User requestedId;
 
     @ManyToOne
     @JoinColumn(name = "assigned_to_id")
-    private User assignedTo;
+    private User assignedAgent;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     private List<Conversation> conversations;

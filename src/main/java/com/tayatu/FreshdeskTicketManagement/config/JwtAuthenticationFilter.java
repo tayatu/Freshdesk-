@@ -37,10 +37,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String requestTokenHeader = request.getHeader("Authorization");
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             String jwtToken = requestTokenHeader.substring(7);
-
+            System.out.println("Extracted JWT Token: " + jwtToken);
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.TEXT_PLAIN);
-            headers.setBearerAuth(requestTokenHeader);
             HttpEntity<String> entity = new HttpEntity<>(jwtToken, headers);
 
             try {
